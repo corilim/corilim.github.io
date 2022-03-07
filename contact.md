@@ -4,7 +4,7 @@
 
 layout: default
 ---
-# Reaching us
+# Contact
 ## Address
 ![vCard QR code](/img/TVettenburg_vcard-300x300.png "Scattering by heterogeneous birefringent material"){: style="max-width: 25%; float: right"}
 University of Dundee<br />
@@ -13,11 +13,12 @@ Ewing Building, office B.6<br />
 Small's Lane, Dundee, Scotland, UK<br />
 DD1 4HN<br />
 
-## Contact
+## Contact info
 office: [+44 1382 384507](tel:+441382384507)<br />
 e-mail: [t.vettenburg@dundee.ac.uk](mailto:t.vettenburg@dundee.ac.uk?subject=corilim)<br />
 skype: [tom.vettenburg](skype:tom.vettenburg?chat)
 
+# Reaching us
 <iframe src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d4409.174828867932!2d-2.9791411203996385!3d56.4576407037304!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e2!4m5!1s0x48865c957a850ae5%3A0x1feafb1d1626334b!2sDundee%20Railway%20Station%2C%20South%20Union%20Street%2C%20Dundee!3m2!1d56.456499699999995!2d-2.9714!4m5!1s0x48865cb8af745817%3A0x40c4f7b358dba8cb!2sEwing%20Building%2C%20Dundee%20DD1%204HR!3m2!1d56.4581958!2d-2.9802375!5e0!3m2!1sen!2suk!4v1570094898089!5m2!1sen!2suk" width="600" height="450" frameborder="0" scrolling="no" class="map">
 </iframe>
 
