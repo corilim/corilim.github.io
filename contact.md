@@ -6,7 +6,7 @@ layout: default
 ---
 # Reaching us
 ## Address
-![vCard QR code](https://sites.dundee.ac.uk/vettenburg/wp-content/uploads/sites/125/2019/08/TVettenburg_vcard-300x300.png "Scattering by heterogeneous birefringent material"){: style="max-width: 25%; float: right"}
+![vCard QR code](/img/TVettenburg_vcard-300x300.png "Scattering by heterogeneous birefringent material"){: style="max-width: 25%; float: right"}
 University of Dundee<br />
 School of Science and Engineering<br />
 Ewing Building, office B.6<br />
