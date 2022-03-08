@@ -1676,7 +1676,7 @@ this.wordle.bundle = function(e) {
                                   n = e.isWin,
                                   r = JSON.parse(window.localStorage.getItem(j)),
                                   i = JSON.parse(window.localStorage.getItem(S)),
-                                  l = "Wordle ".concat(s);
+                                  l = "Science Wordle ".concat(s);
                               l += " ".concat(n ? t : "X", "/").concat(6), o && (l += "*");
                               var d = "";
                               return a.forEach((function(e) {
