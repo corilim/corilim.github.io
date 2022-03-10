@@ -23,6 +23,11 @@ github_username:  tttom
 # Custom
 show_downloads: false
 
+header_pages:
+  - index.md
+  - collaborations.md
+  - contact.md
+
 # Build settings
 markdown: kramdown
 theme: minima
