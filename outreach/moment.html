@@ -27,8 +27,8 @@
 
                 var fractional_year =  (day_of_year - 1) * 2 * Math.PI / 365.25;
                 var declination = 0.006918 - 0.399912 * Math.cos(fractional_year) + 0.070257 * Math.sin(fractional_year) - 0.006758 * Math.cos(2 * fractional_year) + 0.000907 * Math.sin(2 * fractional_year) - 0.002697 * Math.cos(3 * fractional_year) + 0.00148 * Math.sin(3 * fractional_year)
-                function clamp(num) {
-                    return num <= -1 ? -1 : num >= 1 ? 1 : num
+                function clamp(n) {
+                    return n <= -1 ? -1 : n >= 1 ? 1 : n
                 }
                 var daylight_h = Math.acos(clamp(Math.cos(1.5853) / (Math.cos(latitude) * Math.cos(declination)) - Math.tan(latitude) * Math.tan(declination))) * 24 / Math.PI;
                 var solar_hour_s = daylight_h * 3600 / 12;
@@ -63,6 +63,9 @@
                 font-size: xx-large;
                 text-align: center;
             }
+            input:hover {
+                color: darkred;
+            }
         </style>
     </head>
     <body onload="update()">
@@ -72,8 +75,8 @@
                 <label for="time">On</label>
                 <input type="text" name="time" size="12" onchange="update()"> 
                 <label for="latitude">at latitude</label>
-                <input type="text" name="latitude" size="5" onchange="update()">°, 
-                a moment takes precisely <b><span id="duration"> </span> seconds</b>.
+                <input type="text" name="latitude" size="5" value="0" onchange="update()">°, 
+                a moment lasts precisely <b><span id="duration"> </span> seconds</b>.
             </form> 
 
             <h2>Perhaps a little longer than expected!</h2>
@@ -92,7 +95,8 @@
                 <a href="http://www.jgiesen.de/astro/suncalc/calculations.htm">here</a> and <a href="https://physics.stackexchange.com/questions/28563/hours-of-light-per-day-based-on-latitude-longitude-formula">here</a>.
                 
                 In summary, the number of seconds in a moment is given by
-                <math display="block" class="tml-display" style="display:block math;">
+                <!-- Used https://temml.org/ with t = \cos^{-1}\left(\max\left\{-1, \min\left[\frac{\cos(1.5853)}{\cos(\theta)\cos(\delta)} - \tan(\theta)\tan(\delta), 1\right]\right\}\right) \frac{180}{\pi} -->
+                <math display="block" class="tml-display" style="display:block math;" alttext="t = \cos^{-1}\left(\max\left\{-1, \min\left[\frac{\cos(1.5853)}{\cos(\theta)\cos(\delta)} - \tan(\theta)\tan(\delta), 1\right]\right\}\right) \frac{180}{\pi}">
                     <mrow>
                         <mi>t</mi>
                         <mo>=</mo>
@@ -105,53 +109,62 @@
                         </msup>
                         <mo>⁡</mo>
                         <mrow>
-                        <mo fence="true" form="prefix">{</mo>
+                        <mo fence="true" form="prefix">(</mo>
                         <mrow>
-                            <mi>min</mi>
+                            <mi>max</mi>
                             <mo>⁡</mo>
                         </mrow>
                         <mrow>
+                            <mo fence="true" form="prefix">{</mo>
+                            <mo>−</mo>
+                            <mn>1</mn>
+                            <mo separator="true">,</mo>
+                            <mrow>
+                            <mi>min</mi>
+                            <mo>⁡</mo>
+                            </mrow>
+                            <mrow>
                             <mo fence="true" form="prefix">[</mo>
                             <mfrac>
-                            <mrow>
                                 <mrow>
-                                <mi>cos</mi>
-                                <mo>⁡</mo>
+                                <mrow>
+                                    <mi>cos</mi>
+                                    <mo>⁡</mo>
                                 </mrow>
                                 <mo form="prefix" stretchy="false">(</mo>
                                 <mn>1.5853</mn>
                                 <mo form="postfix" stretchy="false" lspace="0em" rspace="0em">)</mo>
-                            </mrow>
-                            <mrow>
+                                </mrow>
                                 <mrow>
-                                <mi>cos</mi>
-                                <mo>⁡</mo>
+                                <mrow>
+                                    <mi>cos</mi>
+                                    <mo>⁡</mo>
                                 </mrow>
                                 <mo form="prefix" stretchy="false">(</mo>
                                 <mi>θ</mi>
                                 <mo form="postfix" stretchy="false">)</mo>
                                 <mrow>
-                                <mspace width="0.1667em"></mspace>
-                                <mi>cos</mi>
-                                <mo>⁡</mo>
+                                    <mspace width="0.1667em"></mspace>
+                                    <mi>cos</mi>
+                                    <mo>⁡</mo>
                                 </mrow>
                                 <mo form="prefix" stretchy="false">(</mo>
                                 <mi>δ</mi>
                                 <mo form="postfix" stretchy="false" lspace="0em" rspace="0em">)</mo>
-                            </mrow>
+                                </mrow>
                             </mfrac>
                             <mo>−</mo>
                             <mrow>
-                            <mi>tan</mi>
-                            <mo>⁡</mo>
+                                <mi>tan</mi>
+                                <mo>⁡</mo>
                             </mrow>
                             <mo form="prefix" stretchy="false">(</mo>
                             <mi>θ</mi>
                             <mo form="postfix" stretchy="false">)</mo>
                             <mrow>
-                            <mspace width="0.1667em"></mspace>
-                            <mi>tan</mi>
-                            <mo>⁡</mo>
+                                <mspace width="0.1667em"></mspace>
+                                <mi>tan</mi>
+                                <mo>⁡</mo>
                             </mrow>
                             <mo form="prefix" stretchy="false">(</mo>
                             <mi>δ</mi>
@@ -159,15 +172,17 @@
                             <mo separator="true">,</mo>
                             <mn>1</mn>
                             <mo fence="true" form="postfix">]</mo>
+                            </mrow>
+                            <mo fence="true" form="postfix">}</mo>
                         </mrow>
-                        <mo fence="true" form="postfix">}</mo>
+                        <mo fence="true" form="postfix">)</mo>
                         </mrow>
                         <mfrac>
                         <mn>180</mn>
                         <mi>π</mi>
                         </mfrac>
                     </mrow>
-                    </math>
+                </math>
                 where θ is the latitude of the location, and δ is the declination at the time of year, determined as
                 <math display="block" class="tml-display" style="display:block math;">
                     <mrow>
@@ -241,7 +256,6 @@
                     </mrow>
                     </math>
                 where ϕ is the fraction of the year that has passed since January 1<sup>st</sup>.
-                <!-- Used https://temml.org/ with t = \cos^{-1}\left\{\min\left[\frac{\cos(1.5853)}{\cos(\theta)\cos(\delta)} - \tan(\theta)\tan(\delta), 1\right]\right\} \frac{180}{\pi} -->
             </p>
         </div>
     </body>
