@@ -5,6 +5,7 @@
         <script "text/javascript">
             function setLatitude(position){
                 document.getElementsByName('latitude')[0].value = position.coords.latitude;
+                update();
             }
             
             function update(){
