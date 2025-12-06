@@ -1,0 +1,247 @@
+ <!DOCTYPE html>
+<html>
+    <head>
+        <title>Moment</title>
+        <script "text/javascript">
+            function setLatitude(position){
+                document.getElementsByName('latitude')[0].value = position.coords.latitude;
+            }
+            
+            function update(){
+                var time = Date.parse(document.getElementsByName('time')[0].value);
+                if (isNaN(time)) {
+                    var today = new Date();
+                    document.getElementsByName('time')[0].value = today.toDateString();
+                    var time = today.getTime();
+                }
+                var day_of_year = time / 1000 / 3600 / 24 % 365.25 + 1;
+
+                var latitude_str = document.getElementsByName('latitude')[0].value;
+                var latitude = parseFloat(latitude_str) * Math.PI / 180
+                if (isNaN(latitude)) {
+                    if (navigator.geolocation) navigator.geolocation.getCurrentPosition(setLatitude);
+                    return;
+                }
+                if (latitude_str.toLowerCase().includes('s')) {latitude = -latitude;}
+
+                var fractional_year =  (day_of_year - 1) * 2 * Math.PI / 365.25;
+                var declination = 0.006918 - 0.399912 * Math.cos(fractional_year) + 0.070257 * Math.sin(fractional_year) - 0.006758 * Math.cos(2 * fractional_year) + 0.000907 * Math.sin(2 * fractional_year) - 0.002697 * Math.cos(3 * fractional_year) + 0.00148 * Math.sin(3 * fractional_year)
+                function clamp(num) {
+                    return num <= -1 ? -1 : num >= 1 ? 1 : num
+                }
+                var daylight_h = Math.acos(clamp(Math.cos(1.5853) / (Math.cos(latitude) * Math.cos(declination)) - Math.tan(latitude) * Math.tan(declination))) * 24 / Math.PI;
+                var solar_hour_s = daylight_h * 3600 / 12;
+                var moment = solar_hour_s / 40;
+                document.getElementById('duration').innerHTML = moment.toFixed(1);
+            }
+        </script>
+        <style>
+            body {
+                background-color: lightblue;
+                font-family: sans-serif;
+                font-size: large;
+            }
+
+            h1 {text-align: center; padding-top: 2em;}
+            h2 {text-align: center; margin-top: 4em;}
+
+            form {
+                font-size: xx-large;
+                margin-top: 4em;
+                margin-bottom: 4em;
+            }
+            
+            div {
+                max-width: 70em;
+                margin: auto;
+            }
+
+            input {
+                border: none;
+                background-color: lightblue;
+                font-size: xx-large;
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body onload="update()">
+        <div>
+            <h1>How long does a moment last?</h1>
+            <form>
+                <label for="time">On</label>
+                <input type="text" name="time" size="11" onchange="update()"> 
+                <label for="latitude">at latitude</label>
+                <input type="text" name="latitude" size="5" onchange="update()">°, 
+                a moment takes precisely <b><span id="duration"> </span> seconds</b>.
+            </form> 
+
+            <h2>Perhaps a little longer than expected!</h2>
+            To see how it difference by location and time of year, simply click and edit the date and latitude above.
+            
+            <h2>So what really is a moment?</h2>
+            <p>
+                In midieval times, a moment was precisely 1 of 40 equal divisions on a solar hour dial. 
+                The number of seconds in a solar hour changes throughout the year, but there are always 12 solar hours between dawn and dusk.
+            </p>
+            <p>
+                So how many seconds are there in a moment? Since the daylight times changes throughout the year and with lattitude, the answer depends on where and when you ask this question. Select a date and latitude to find out yourself.
+            </p>
+            <p>
+                The <a href="https://en.wikipedia.org/wiki/Moment_(unit)">Wikipedia</a> describes the concept and its history, while the calculation is explained 
+                <a href="http://www.jgiesen.de/astro/suncalc/calculations.htm">here</a> and <a href="https://physics.stackexchange.com/questions/28563/hours-of-light-per-day-based-on-latitude-longitude-formula">here</a>.
+                
+                In summary, the number of seconds in a moment is given by
+                <math display="block" class="tml-display" style="display:block math;">
+                    <mrow>
+                        <mi>t</mi>
+                        <mo>=</mo>
+                        <msup>
+                        <mi>cos</mi>
+                        <mrow>
+                            <mo lspace="0em" rspace="0em">−</mo>
+                            <mn>1</mn>
+                        </mrow>
+                        </msup>
+                        <mo>⁡</mo>
+                        <mrow>
+                        <mo fence="true" form="prefix">{</mo>
+                        <mrow>
+                            <mi>min</mi>
+                            <mo>⁡</mo>
+                        </mrow>
+                        <mrow>
+                            <mo fence="true" form="prefix">[</mo>
+                            <mfrac>
+                            <mrow>
+                                <mrow>
+                                <mi>cos</mi>
+                                <mo>⁡</mo>
+                                </mrow>
+                                <mo form="prefix" stretchy="false">(</mo>
+                                <mn>1.5853</mn>
+                                <mo form="postfix" stretchy="false" lspace="0em" rspace="0em">)</mo>
+                            </mrow>
+                            <mrow>
+                                <mrow>
+                                <mi>cos</mi>
+                                <mo>⁡</mo>
+                                </mrow>
+                                <mo form="prefix" stretchy="false">(</mo>
+                                <mi>θ</mi>
+                                <mo form="postfix" stretchy="false">)</mo>
+                                <mrow>
+                                <mspace width="0.1667em"></mspace>
+                                <mi>cos</mi>
+                                <mo>⁡</mo>
+                                </mrow>
+                                <mo form="prefix" stretchy="false">(</mo>
+                                <mi>δ</mi>
+                                <mo form="postfix" stretchy="false" lspace="0em" rspace="0em">)</mo>
+                            </mrow>
+                            </mfrac>
+                            <mo>−</mo>
+                            <mrow>
+                            <mi>tan</mi>
+                            <mo>⁡</mo>
+                            </mrow>
+                            <mo form="prefix" stretchy="false">(</mo>
+                            <mi>θ</mi>
+                            <mo form="postfix" stretchy="false">)</mo>
+                            <mrow>
+                            <mspace width="0.1667em"></mspace>
+                            <mi>tan</mi>
+                            <mo>⁡</mo>
+                            </mrow>
+                            <mo form="prefix" stretchy="false">(</mo>
+                            <mi>δ</mi>
+                            <mo form="postfix" stretchy="false">)</mo>
+                            <mo separator="true">,</mo>
+                            <mn>1</mn>
+                            <mo fence="true" form="postfix">]</mo>
+                        </mrow>
+                        <mo fence="true" form="postfix">}</mo>
+                        </mrow>
+                        <mfrac>
+                        <mn>180</mn>
+                        <mi>π</mi>
+                        </mfrac>
+                    </mrow>
+                    </math>
+                where θ is the latitude of the location, and δ is the declination at the time of year, determined as
+                <math display="block" class="tml-display" style="display:block math;">
+                    <mrow>
+                        <mi>δ</mi>
+                        <mo>=</mo>
+                        <mn>0.006918</mn>
+                        <mo>−</mo>
+                        <mn>0.399912</mn>
+                        <mrow>
+                        <mspace width="0.1667em"></mspace>
+                        <mi>cos</mi>
+                        <mo>⁡</mo>
+                        </mrow>
+                        <mo form="prefix" stretchy="false">(</mo>
+                        <mi>ϕ</mi>
+                        <mo form="postfix" stretchy="false">)</mo>
+                        <mo>+</mo>
+                        <mn>0.070257</mn>
+                        <mrow>
+                        <mspace width="0.1667em"></mspace>
+                        <mi>sin</mi>
+                        <mo>⁡</mo>
+                        </mrow>
+                        <mo form="prefix" stretchy="false">(</mo>
+                        <mi>ϕ</mi>
+                        <mo form="postfix" stretchy="false">)</mo>
+                        <mo>−</mo>
+                        <mn>0.006758</mn>
+                        <mrow>
+                        <mspace width="0.1667em"></mspace>
+                        <mi>cos</mi>
+                        <mo>⁡</mo>
+                        </mrow>
+                        <mo form="prefix" stretchy="false">(</mo>
+                        <mn>2</mn>
+                        <mi>ϕ</mi>
+                        <mo form="postfix" stretchy="false">)</mo>
+                        <mo>+</mo>
+                        <mn>0.000907</mn>
+                        <mrow>
+                        <mspace width="0.1667em"></mspace>
+                        <mi>sin</mi>
+                        <mo>⁡</mo>
+                        </mrow>
+                        <mo form="prefix" stretchy="false">(</mo>
+                        <mn>2</mn>
+                        <mi>ϕ</mi>
+                        <mo form="postfix" stretchy="false">)</mo>
+                        <mo>−</mo>
+                        <mn>0.002697</mn>
+                        <mrow>
+                        <mspace width="0.1667em"></mspace>
+                        <mi>cos</mi>
+                        <mo>⁡</mo>
+                        </mrow>
+                        <mo form="prefix" stretchy="false">(</mo>
+                        <mn>3</mn>
+                        <mi>ϕ</mi>
+                        <mo form="postfix" stretchy="false">)</mo>
+                        <mo>+</mo>
+                        <mn>0.00148</mn>
+                        <mrow>
+                        <mspace width="0.1667em"></mspace>
+                        <mi>sin</mi>
+                        <mo>⁡</mo>
+                        </mrow>
+                        <mo form="prefix" stretchy="false">(</mo>
+                        <mn>3</mn>
+                        <mi>ϕ</mi>
+                        <mo form="postfix" stretchy="false">)</mo>
+                    </mrow>
+                    </math>
+                where ϕ is the fraction of the year that has passed since January 1<sup>st</sup>.
+                <!-- Used https://temml.org/ with t = \cos^{-1}\left\{\min\left[\frac{\cos(1.5853)}{\cos(\theta)\cos(\delta)} - \tan(\theta)\tan(\delta), 1\right]\right\} \frac{180}{\pi} -->
+            </p>
+        </div>
+    </body>
+</html> 
