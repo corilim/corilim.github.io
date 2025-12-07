@@ -51,8 +51,9 @@
                     b.initialValue = b.value;
                     b.classList.add('counting');
                     b.endTime = new Date().getTime() + t * 1000;
-                    b.value = t.toFixed() + 's';   
-                    b.timeout = setTimeout(countDown, (t % 1) * 1000);
+                    rt = b.endTime - new Date().getTime();
+                    b.value = (rt / 1000).toFixed() + 's';
+                    b.timeout = setTimeout(countDown, rt % 1000);
                 }
             }
             function countDown(t) {
@@ -115,7 +116,7 @@
                 background-color: lightgreen;
             }
             input#wait.counting {
-                color: darkred;
+                color: darkgreen;
                 background-color: white;
                 font-size: 150pt;
             }
